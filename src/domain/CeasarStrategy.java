@@ -8,6 +8,10 @@ public class CeasarStrategy implements CodingStrategy {
       this.offset = offset;
    }
 
+   public void setOffset(int i){
+      this.offset = i;
+   }
+
    @Override
    public String encode(String input) {
 

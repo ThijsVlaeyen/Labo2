@@ -1,5 +1,7 @@
 package ui;
 
+import domain.TranslatorContext;
+
 public class TranslatorUI {
     public TranslatorContext context;
 
