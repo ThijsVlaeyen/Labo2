@@ -16,4 +16,8 @@ public class MirrorStrategy implements CodingStrategy {
       return encode(input).toLowerCase();
    }
 
+   @Override
+   public String toString(){
+      return "MirrorStrategy";
+   }
 }

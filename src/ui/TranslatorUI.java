@@ -1,17 +1,79 @@
 package ui;
 
+import domain.CeasarStrategy;
+import domain.CodingStrategy;
+import domain.MirrorStrategy;
 import domain.TranslatorContext;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
-public class TranslatorUI {
+public class TranslatorUI extends Application {
+
     public TranslatorContext context;
+    private Button encode;
+    private Button decode;
+    private String text;
+    private TextField input;
+    private TextField output;
+    private ComboBox combobox;
+    private CodingStrategy codingStrategy;
 
-    public TranslatorUI() {
-        context = new TranslatorContext();
+    public void start(Stage primaryStage) {
+        setup(primaryStage);
+        combobox.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                // every time you change something in the dropdown it will change here
+                codingStrategy = (CodingStrategy) newValue;
+            }
+        });
+        if (text == null || !text.isEmpty()){
+            System.out.println("error put in text");
+        }
+        if (codingStrategy == null){
+            System.out.println("please choose a codingStrategy with the dropdown menu");
+        }
+        context = new TranslatorContext(codingStrategy,text);
+        encode.setOnMouseClicked(event -> {
+           output.setText(context.encode());
+        });
     }
 
-    public void start() {
-
+    private void setup(Stage primaryStage) {
+        GridPane root = new GridPane();
+        Scene scene = new Scene(root, 800, 500);
+        encode = new Button("Encode");
+        decode = new Button("Decode");
+        CeasarStrategy cs = new CeasarStrategy(1);
+        MirrorStrategy mirror = new MirrorStrategy();
+        ObservableList<CodingStrategy> options = FXCollections.observableArrayList(
+                cs,
+                mirror
+        );
+        combobox = new ComboBox(options);
+        input = new TextField();
+        output = new TextField();
+        output.setDisable(true);
+        root.add(encode,1,1);
+        root.add(decode,2,1);
+        root.add(combobox,3,1);
+        root.add(input,4,1);
+        root.add(output,5,1);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("");
+        primaryStage.show();
     }
+
 
     public void encode(String stringToEncode) {
 

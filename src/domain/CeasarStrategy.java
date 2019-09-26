@@ -53,4 +53,9 @@ public class CeasarStrategy implements CodingStrategy {
       return result.toString();
    }
 
+   @Override
+   public String toString(){
+      return "CeasarStrategy";
+   }
+
 }
