@@ -13,11 +13,7 @@ public class MirrorStrategy implements CodingStrategy {
 
    @Override
    public String decode(String input) {
-      String decoded = "";
-      for (int i = input.length()-1; i >=0; i--) {
-         decoded += input.charAt(i);
-      }
-      return decoded.toLowerCase();
+      return encode(input).toLowerCase();
    }
 
 }
