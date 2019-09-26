@@ -14,6 +14,10 @@ public class TranslatorContext{
       this.codingStrategy = codingStrategy;
    }
 
+   public void setInput(String input){
+       this.input = input;
+   }
+
    public String encode(){
       return codingStrategy.encode(input);
    }

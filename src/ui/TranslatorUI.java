@@ -25,6 +25,7 @@ public class TranslatorUI extends Application {
     private String text;
     private TextField input;
     private TextField output;
+    private TextField offsetinput;
     private ComboBox combobox;
     private CodingStrategy codingStrategy;
 
@@ -35,6 +36,31 @@ public class TranslatorUI extends Application {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 // every time you change something in the dropdown it will change here
                 codingStrategy = (CodingStrategy) newValue;
+                if (codingStrategy.getClass() == CeasarStrategy.class){
+                    offsetinput.setVisible(true);
+                }else{
+                    offsetinput.setVisible(false);
+                }
+            }
+        });
+        input.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                // every time you change the value of the textfield the text variable will change as well
+                text = newValue;
+            }
+        });
+        offsetinput.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                // again every time you change the value in the textfield it will get changed here
+                try {
+                    int offset = Integer.parseInt(newValue);
+                    CeasarStrategy ceaser = (CeasarStrategy) codingStrategy;
+                    ceaser.setOffset(offset);
+                }catch (NumberFormatException e){
+                    offsetinput.setText("");
+                }
             }
         });
         if (text == null || !text.isEmpty()){
@@ -45,7 +71,14 @@ public class TranslatorUI extends Application {
         }
         context = new TranslatorContext(codingStrategy,text);
         encode.setOnMouseClicked(event -> {
+           context.setInput(text);
+           context.setCodingStrategy(codingStrategy);
            output.setText(context.encode());
+        });
+        decode.setOnMouseClicked(event -> {
+            context.setInput(text);
+            context.setCodingStrategy(codingStrategy);
+            output.setText(context.decode());
         });
     }
 
@@ -63,10 +96,13 @@ public class TranslatorUI extends Application {
         combobox = new ComboBox(options);
         input = new TextField();
         output = new TextField();
+        offsetinput = new TextField("offset number for ceasarcipher (number)");
+        offsetinput.setVisible(false);
         output.setDisable(true);
         root.add(encode,1,1);
         root.add(decode,2,1);
         root.add(combobox,3,1);
+        root.add(offsetinput,3,2);
         root.add(input,4,1);
         root.add(output,5,1);
         primaryStage.setScene(scene);
