@@ -4,12 +4,20 @@ public class MirrorStrategy implements CodingStrategy {
 
    @Override
    public String encode(String input) {
-      return null;
+      String encoded = "";
+      for (int i = input.length()-1; i >=0; i--) {
+         encoded += input.charAt(i);
+      }
+      return encoded.toLowerCase();
    }
 
    @Override
    public String decode(String input) {
-      return null;
+      String decoded = "";
+      for (int i = input.length()-1; i >=0; i--) {
+         decoded += input.charAt(i);
+      }
+      return decoded.toLowerCase();
    }
 
 }
