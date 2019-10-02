@@ -1,9 +1,6 @@
 package ui;
 
-import domain.CeasarStrategy;
-import domain.CodingStrategy;
-import domain.MirrorStrategy;
-import domain.TranslatorContext;
+import domain.*;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,6 +23,7 @@ public class TranslatorUI extends Application {
     private TextField input;
     private TextField output;
     private TextField offsetinput;
+    private TextField autokey;
     private ComboBox combobox;
     private CodingStrategy codingStrategy;
 
@@ -40,6 +38,11 @@ public class TranslatorUI extends Application {
                     offsetinput.setVisible(true);
                 }else{
                     offsetinput.setVisible(false);
+                }
+                if (codingStrategy.getClass() == AutokeyStrategy.class){
+                    autokey.setVisible(true);
+                }else{
+                    autokey.setVisible(false);
                 }
             }
         });
@@ -60,6 +63,18 @@ public class TranslatorUI extends Application {
                     ceaser.setOffset(offset);
                 }catch (NumberFormatException e){
                     offsetinput.setText("");
+                }
+            }
+        });
+        autokey.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                // again every time you change the value in the textfield it will get changed here
+                try {
+                    AutokeyStrategy autokeyStrategy = (AutokeyStrategy) codingStrategy;
+                    autokeyStrategy.setKey(newValue);
+                }catch (Exception e){
+                    autokey.setText("");
                 }
             }
         });
@@ -89,20 +104,25 @@ public class TranslatorUI extends Application {
         decode = new Button("Decode");
         CeasarStrategy cs = new CeasarStrategy(1);
         MirrorStrategy mirror = new MirrorStrategy();
+        AutokeyStrategy autoKey = new AutokeyStrategy("a");
         ObservableList<CodingStrategy> options = FXCollections.observableArrayList(
                 cs,
-                mirror
+                mirror,
+                autoKey
         );
         combobox = new ComboBox(options);
         input = new TextField();
         output = new TextField();
         offsetinput = new TextField("offset number for ceasarcipher (number)");
         offsetinput.setVisible(false);
+        autokey = new TextField("key value");
+        autokey.setVisible(false);
         output.setDisable(true);
         root.add(encode,1,1);
         root.add(decode,2,1);
         root.add(combobox,3,1);
         root.add(offsetinput,3,2);
+        root.add(autokey, 6, 1);
         root.add(input,4,1);
         root.add(output,5,1);
         primaryStage.setScene(scene);
