@@ -32,6 +32,8 @@ public class TranslatorUI extends Application {
         combobox.valueProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                //TODO refactor
+
                 // every time you change something in the dropdown it will change here
                 codingStrategy = (CodingStrategy) newValue;
                 if (codingStrategy.getClass() == CeasarStrategy.class){
