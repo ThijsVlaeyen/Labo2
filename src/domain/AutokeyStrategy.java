@@ -8,6 +8,9 @@ public class AutokeyStrategy implements CodingStrategyWithOffset {
 
     private static String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private String key;
+    public AutokeyStrategy(){
+        this.key = "a";
+    }
 
     public AutokeyStrategy(String key)
     {
