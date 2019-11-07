@@ -1,15 +1,25 @@
 package domain;
 
-public class CeasarStrategy implements CodingStrategy {
+public class CeasarStrategy implements CodingStrategyWithOffset {
 
    private int offset;
+
+   public CeasarStrategy(){
+      this.offset = 1;
+   }
 
    public CeasarStrategy(int offset){
       this.offset = offset;
    }
 
-   public void setOffset(int i){
-      this.offset = i;
+   @Override
+   public void setOffset(String i){
+      try{
+         int offset = Integer.valueOf(i);
+         this.offset = offset;
+      }catch (NumberFormatException e){
+         e.printStackTrace();
+      }
    }
 
    @Override

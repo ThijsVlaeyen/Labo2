@@ -1,9 +1,13 @@
 package domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TranslatorContext{
 
    private String input;
    private CodingStrategy codingStrategy;
+   private CipherType cipherType;
 
    public TranslatorContext(CodingStrategy coding, String text){
       this.input = text;
@@ -32,6 +36,14 @@ public class TranslatorContext{
       out += "\nInput text: " + input;
       out += "\nEncoded text: " + this.encode();
       return out;
+   }
+
+   public List<String> getStrategies(){
+      List<String> list = new ArrayList<>();
+      for (CipherType cipher:this.cipherType.values()) {
+         list.add(cipher.getName());
+      }
+      return list;
    }
 
 }

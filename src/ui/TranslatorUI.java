@@ -26,28 +26,28 @@ public class TranslatorUI extends Application {
     private TextField autokey;
     private ComboBox combobox;
     private CodingStrategy codingStrategy;
+    private String offset = null;
 
     public void start(Stage primaryStage) {
         setup(primaryStage);
-        combobox.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                //TODO refactor
-
-                // every time you change something in the dropdown it will change here
-                codingStrategy = (CodingStrategy) newValue;
-                if (codingStrategy.getClass() == CeasarStrategy.class){
-                    offsetinput.setVisible(true);
-                }else{
-                    offsetinput.setVisible(false);
-                }
-                if (codingStrategy.getClass() == AutokeyStrategy.class){
-                    autokey.setVisible(true);
-                }else{
-                    autokey.setVisible(false);
-                }
-            }
-        });
+        combobox.valueProperty().addListener(new setOnClick());
+//        combobox.valueProperty().addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+////                // every time you change something in the dropdown it will change here
+////                codingStrategy = (CodingStrategy) newValue;
+////                if (codingStrategy.getClass() == CeasarStrategy.class){
+////                    offsetinput.setVisible(true);
+////                }else{
+////                    offsetinput.setVisible(false);
+////                }
+////                if (codingStrategy.getClass() == AutokeyStrategy.class){
+////                    autokey.setVisible(true);
+////                }else{
+////                    autokey.setVisible(false);
+////                }
+//            }
+//        });
         input.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -59,13 +59,14 @@ public class TranslatorUI extends Application {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 // again every time you change the value in the textfield it will get changed here
-                try {
-                    int offset = Integer.parseInt(newValue);
-                    CeasarStrategy ceaser = (CeasarStrategy) codingStrategy;
-                    ceaser.setOffset(offset);
-                }catch (NumberFormatException e){
-                    offsetinput.setText("");
-                }
+//                try {
+//                    int offset = Integer.parseInt(newValue);
+//                    CeasarStrategy ceaser = (CeasarStrategy) codingStrategy;
+//                    ceaser.setOffset(offset);
+//                }catch (NumberFormatException e){
+//                    offsetinput.setText("");
+//                }
+                offset = newValue;
             }
         });
         autokey.textProperty().addListener(new ChangeListener<String>() {
@@ -86,7 +87,6 @@ public class TranslatorUI extends Application {
         if (codingStrategy == null){
             System.out.println("please choose a codingStrategy with the dropdown menu");
         }
-        context = new TranslatorContext(codingStrategy,text);
         encode.setOnMouseClicked(event -> {
            context.setInput(text);
            context.setCodingStrategy(codingStrategy);
@@ -100,18 +100,12 @@ public class TranslatorUI extends Application {
     }
 
     private void setup(Stage primaryStage) {
+        context = new TranslatorContext(codingStrategy,text);
         GridPane root = new GridPane();
         Scene scene = new Scene(root, 800, 500);
         encode = new Button("Encode");
         decode = new Button("Decode");
-        CeasarStrategy cs = new CeasarStrategy(1);
-        MirrorStrategy mirror = new MirrorStrategy();
-        AutokeyStrategy autoKey = new AutokeyStrategy("a");
-        ObservableList<CodingStrategy> options = FXCollections.observableArrayList(
-                cs,
-                mirror,
-                autoKey
-        );
+        ObservableList<String> options = FXCollections.observableArrayList(context.getStrategies());
         combobox = new ComboBox(options);
         input = new TextField();
         output = new TextField();
@@ -139,5 +133,24 @@ public class TranslatorUI extends Application {
 
     public void decode(String stringToDecode) {
 
+    }
+
+    class setOnClick implements ChangeListener<String>{
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            CodingStrategy cs = CodingStrategyFactory.createObject(newValue);
+            CipherType ct = CipherType.valueOf(newValue.toUpperCase());
+            codingStrategy = cs;
+            if (ct.isOffset()){
+                CodingStrategyWithOffset csw = (CodingStrategyWithOffset) cs;
+                codingStrategy = csw;
+                offsetinput.setVisible(true);
+                if (offset != null){
+                    csw.setOffset(offset);
+                }
+            }else{
+                offsetinput.setVisible(false);
+            }
+        }
     }
 }

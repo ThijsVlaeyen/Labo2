@@ -2,7 +2,7 @@ package domain;
 
 public class CodingStrategyFactory {
 
-      public CodingStrategy createObject(String type){
+      public static CodingStrategy createObject(String type){
          CipherType taalEnum = CipherType.valueOf(type);
          String className = taalEnum.getClassName();
          CodingStrategy encoder = null;
@@ -13,7 +13,7 @@ public class CodingStrategyFactory {
             encoder = (CodingStrategy) encoderObject;
          } catch (Exception e) {
             System.out.println(e.getMessage());
-         } //G2 will win worlds
+         }
          return encoder;
 
       }

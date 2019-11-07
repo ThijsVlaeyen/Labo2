@@ -4,7 +4,7 @@ import java.util.*;
 import java.lang.*;
 import java.math.*;
 
-public class AutokeyStrategy implements CodingStrategy {
+public class AutokeyStrategy implements CodingStrategyWithOffset {
 
     private static String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private String key;
@@ -63,5 +63,10 @@ public class AutokeyStrategy implements CodingStrategy {
     @Override
     public String toString(){
         return "AutokeyStrategy";
+    }
+
+    @Override
+    public void setOffset(String offset) {
+        this.key = offset;
     }
 }
