@@ -3,7 +3,7 @@ package domain;
 public class CodingStrategyFactory {
 
       public static CodingStrategy createObject(String type){
-         CipherType taalEnum = CipherType.valueOf(type);
+         CipherType taalEnum = CipherType.valueOf(type.toUpperCase());
          String className = taalEnum.getClassName();
          CodingStrategy encoder = null;
 

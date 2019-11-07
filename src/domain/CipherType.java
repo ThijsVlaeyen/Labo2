@@ -1,7 +1,7 @@
 package domain;
 
 public enum CipherType {
-    CEASERCIPHER("ceasercipher","domain.CeaserStrategy",true),
+    CEASERCIPHER("ceasercipher","domain.CeasarStrategy",true),
     MIRROR("Mirror","domain.MirrorStrategy",false),
     AUTOKEY("Autokey","domain.AutokeyStrategy",true),
     RANDOMCIPHER("RandomCipher","domain.RandomCypher",false);
